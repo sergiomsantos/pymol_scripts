@@ -34,5 +34,5 @@ USAGE
  
     loadr filename, [host=None [, *args [, **kwargs]]]
 
-    ()...)
+    (...)
 ```

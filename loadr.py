@@ -47,14 +47,22 @@ def loadr(filename, host=None, *args, **kwargs):
         tmpdir = tempfile.gettempdir()
         scp_source = host + ':' + filename
         scp_target = tmpdir + '/' + fname
+
+        print(f'Trying to load file "{filename}" from host "{host}" ...')
+
         try:
-            subprocess.call(['scp', scp_source, scp_target])
-        except:
+            ret_code = subprocess.call(['scp', scp_source, scp_target])
+        except Exception as exc:
             print(f'Cannot load remote file {scp_source}')
-            raise IOError
+            print(exc)
+            raise
         else:
-            cmd.load(scp_target, *args, **kwargs)
-            print(f'Loaded {scp_source}')
+            if ret_code == 0:
+                cmd.load(scp_target, *args, **kwargs)
+                print(f'Loaded {scp_source}')
+            else:
+                print(f'Cannot load file "{filename}" from "{host}":'
+                      ' No such file or host!')
     else:
         cmd.load(filename, *args, **kwargs)
 
